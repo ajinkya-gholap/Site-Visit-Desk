@@ -1,0 +1,129 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+  background: #000;
+  color: #fff;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.mark {
+  display: block;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+}
+
+.title {
+  color: #fff;
+  font-size: var(--fs-lg);
+}
+
+.subtitle {
+  margin: 2px 0 0;
+  font-size: var(--fs-xs);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.counts {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+  background: #d32f2f;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.themeToggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 56px;
+  height: 28px;
+  padding: 0 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition-fast);
+}
+
+.themeToggle:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.themeToggle:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.themeToggleIcon {
+  width: 14px;
+  height: 14px;
+  font-size: 12px;
+  line-height: 1;
+  z-index: 1;
+}
+
+.themeToggleThumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+
+.themeToggle[aria-checked='true'] .themeToggleThumb {
+  transform: translateX(28px);
+}
+
+.count {
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+}
+
+.countUrgent {
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.dot {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+
+  .actions {
+    flex-wrap: wrap;
+  }
+}
