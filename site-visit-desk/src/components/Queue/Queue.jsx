@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import QueueToolbar from './QueueToolbar.jsx';
 import RequestList from './RequestList.jsx';
 import { QueueSkeleton, QueueError, QueueEmpty, QueueNoMatch } from './QueueStates.jsx';
@@ -7,7 +7,7 @@ import styles from './Queue.module.css';
 
 const SEVERITY_RANK = { Low: 0, Medium: 1, High: 2, Critical: 3 };
 
-export default function Queue({ requests, loading, error, onRetry, onOpenDetails, onAdvanceStatus, onDelete, addToast, onVisibleChange }) {
+export default function Queue({ requests, loading, error, onRetry, onOpenDetails, onAdvanceStatus, onDelete, addToast }) {
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
   const [severity, setSeverity] = useState('');
@@ -40,14 +40,6 @@ export default function Queue({ requests, loading, error, onRetry, onOpenDetails
     });
     return sorted;
   }, [requests, debouncedSearch, status, severity, sort]);
-
-  // Tell App what's actually on screen right now, so header stats (open/urgent
-  // counts) reflect the filtered view instead of the full raw queue. While
-  // loading or errored, no cards are rendered, so report an empty set.
-  useEffect(() => {
-    if (!onVisibleChange) return;
-    onVisibleChange(loading || error ? [] : visibleRequests);
-  }, [loading, error, visibleRequests, onVisibleChange]);
 
   const clearFilters = () => {
     setSearch('');

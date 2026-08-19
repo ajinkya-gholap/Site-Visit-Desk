@@ -2,19 +2,20 @@ import { useCallback, useEffect, useState } from 'react';
 import Header from './components/Header/Header.jsx';
 import RequestForm from './components/RequestForm/RequestForm.jsx';
 import Queue from './components/Queue/Queue.jsx';
+import RequestDetailsModal from './components/Modal/RequestDetailsModal.jsx';
+import ToastHost from './components/Toast/ToastHost.jsx';
+//import AnalyticsPanel from './components/Analytics/AnalyticsPanel.jsx';
 import { fetchRequests } from './api/mockApi.js';
-import { useTheme } from './hooks/useTheme.js';
+import { useToasts } from './hooks/useToasts.js';
 import styles from './App.module.css';
 
-// Day 2 deliverable: submitting the form prepends a real card to the queue.
-// The details modal, toast portal and analytics panel land on Day 3 —
-// for now, "opening details" and toasts just log to the console.
 export default function App() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [visibleRequests, setVisibleRequests] = useState([]);
-  const { theme, toggleTheme } = useTheme();
+  const [details, setDetails] = useState(null); // { request, triggerElement }
+
+  const { toasts, addToast, dismiss } = useToasts();
 
   const loadRequests = useCallback(() => {
     setLoading(true);
@@ -29,12 +30,8 @@ export default function App() {
     loadRequests();
   }, [loadRequests]);
 
-  const addToast = (message) => {
-    console.log('[toast]', message);
-  };
-
   const handleCreated = (created) => {
-    // Immutable prepend — never mutate the source array.
+    // Immutable prepend — never mutate the source array (3.1 / automatic deductions).
     setRequests((prev) => [created, ...prev]);
   };
 
@@ -44,29 +41,15 @@ export default function App() {
 
   const handleDelete = (id) => {
     setRequests((prev) => prev.filter((r) => r.id !== id));
+    if (details?.request?.id === id) setDetails(null);
   };
 
-  const handleOpenDetails = (request) => {
-    console.log('Open details for (modal arrives Day 3):', request);
-  };
-
-  // Reported by Queue so the header reflects whatever cards are actually on
-  // screen (after search/status/severity filters), not the full raw queue.
-  const handleVisibleChange = useCallback((visible) => {
-    setVisibleRequests(visible);
-  }, []);
-
-  const openCount = visibleRequests.filter((r) => r.status !== 'Closed').length;
-  const urgentCount = visibleRequests.filter((r) => r.severity === 'Critical' && r.status !== 'Closed').length;
+  const openCount = requests.filter((r) => r.status !== 'Closed').length;
+  const urgentCount = requests.filter((r) => r.severity === 'Critical' && r.status !== 'Closed').length;
 
   return (
     <div className={styles.app}>
-      <Header
-        openCount={openCount}
-        urgentCount={urgentCount}
-        theme={theme}
-        onToggleTheme={toggleTheme}
-      />
+      <Header openCount={openCount} urgentCount={urgentCount} />
 
       <main className={styles.layout}>
         <div className={styles.formColumn}>
@@ -79,14 +62,24 @@ export default function App() {
             loading={loading}
             error={error}
             onRetry={loadRequests}
-            onOpenDetails={handleOpenDetails}
+            onOpenDetails={(request, triggerElement) => setDetails({ request, triggerElement })}
             onAdvanceStatus={handleAdvanceStatus}
             onDelete={handleDelete}
             addToast={addToast}
-            onVisibleChange={handleVisibleChange}
           />
+          {!loading && !error && <AnalyticsPanel requests={requests} />}
         </div>
       </main>
+
+      {details && (
+        <RequestDetailsModal
+          request={details.request}
+          triggerElement={details.triggerElement}
+          onClose={() => setDetails(null)}
+        />
+      )}
+
+      <ToastHost toasts={toasts} onDismiss={dismiss} />
     </div>
   );
 }

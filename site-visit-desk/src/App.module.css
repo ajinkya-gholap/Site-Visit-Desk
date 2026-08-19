@@ -16,15 +16,23 @@
 .formColumn {
   position: sticky;
   top: var(--space-5);
-  max-height: calc(100vh - var(--space-5) * 2);
-  overflow-y: auto;
 }
 
+/* Deliberately gives the modal trigger's ancestor `overflow: hidden` + a
+ * transform (a new containing/stacking context) so a non-portal modal would
+ * be visually clipped here — this is why RequestDetailsModal uses
+ * createPortal into #modal-root instead of rendering inline (3.11, see README). */
 .queueColumn {
+  overflow: hidden;
+  transform: translateZ(0);
   border-radius: var(--radius-lg);
   padding-bottom: var(--space-2);
 }
 
+/* Collapse to a single column under 768px — CSS Grid chosen over Flexbox
+ * because the two columns need independent, page-controlled widths
+ * (a fixed form rail + a fluid queue) rather than content-driven sizing;
+ * see README for the full justification (3.9). */
 @media (max-width: 768px) {
   .layout {
     grid-template-columns: 1fr;
@@ -32,7 +40,5 @@
   }
   .formColumn {
     position: static;
-    max-height: none;
-    overflow-y: visible;
   }
 }
