@@ -1,0 +1,38 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-6);
+  align-items: start;
+}
+
+.formColumn {
+  position: sticky;
+  top: var(--space-5);
+  max-height: calc(100vh - var(--space-5) * 2);
+  overflow-y: auto;
+}
+
+.queueColumn {
+  border-radius: var(--radius-lg);
+  padding-bottom: var(--space-2);
+}
+
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+    padding: var(--space-4);
+  }
+  .formColumn {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+  }
+}
