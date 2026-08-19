@@ -54,13 +54,7 @@ export default function RequestCard({ request, onOpenDetails, onAdvanceStatus, o
         <span className={cx(styles.status, STATUS_CLASS[request.status])}>{request.status}</span>
         {overdue && (
           <span className={styles.overdueFlag}>
-            <svg className={styles.overdueIcon} viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                fill="currentColor"
-                d="M12 2 1 21h22L12 2Zm0 6.5c.55 0 1 .45 1 1v4.5a1 1 0 1 1-2 0V9.5c0-.55.45-1 1-1ZM12 18a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5Z"
-              />
-            </svg>
-            Overdue
+            ⚠ Overdue
           </span>
         )}
         <span className={styles.visitDate}>Visit: {request.visitDate}</span>
