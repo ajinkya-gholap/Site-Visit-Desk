@@ -1,11 +1,15 @@
+/* Header stays fixed; only the form and queue columns below it scroll,
+ * each in its own pane, so the page itself never scrolls. */
 .app {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .layout {
   flex: 1;
+  min-height: 0;
   display: grid;
   grid-template-columns: 380px 1fr;
   gap: var(--space-5);
@@ -14,31 +18,40 @@
 }
 
 .formColumn {
-  position: sticky;
-  top: var(--space-5);
+  height: 100%;
+  overflow-y: auto;
+  padding-right: var(--space-1);
 }
 
-/* Deliberately gives the modal trigger's ancestor `overflow: hidden` + a
- * transform (a new containing/stacking context) so a non-portal modal would
- * be visually clipped here — this is why RequestDetailsModal uses
+/* Deliberately gives the modal trigger's ancestor `overflow` + a transform
+ * (a new containing/stacking context) so a non-portal modal would be
+ * visually clipped here — this is why RequestDetailsModal uses
  * createPortal into #modal-root instead of rendering inline (3.11, see README). */
 .queueColumn {
-  overflow: hidden;
+  height: 100%;
+  overflow-y: auto;
   transform: translateZ(0);
   border-radius: var(--radius-lg);
-  padding-bottom: var(--space-2);
+  padding: 0 var(--space-1) var(--space-2);
 }
 
-/* Collapse to a single column under 768px — CSS Grid chosen over Flexbox
- * because the two columns need independent, page-controlled widths
- * (a fixed form rail + a fluid queue) rather than content-driven sizing;
- * see README for the full justification (3.9). */
+/* Collapse to a single, normally-scrolling column under 768px — independent
+ * scroll panes don't make sense once the columns stack. CSS Grid is kept
+ * over Flexbox because the two columns need independent, page-controlled
+ * widths (a fixed form rail + a fluid queue) rather than content-driven
+ * sizing; see README for the full justification (3.9). */
 @media (max-width: 768px) {
+  .app {
+    height: auto;
+    overflow: visible;
+  }
   .layout {
     grid-template-columns: 1fr;
     padding: var(--space-4);
   }
-  .formColumn {
-    position: static;
+  .formColumn,
+  .queueColumn {
+    height: auto;
+    overflow: visible;
   }
 }

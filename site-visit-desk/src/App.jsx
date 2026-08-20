@@ -4,9 +4,10 @@ import RequestForm from './components/RequestForm/RequestForm.jsx';
 import Queue from './components/Queue/Queue.jsx';
 import RequestDetailsModal from './components/Modal/RequestDetailsModal.jsx';
 import ToastHost from './components/Toast/ToastHost.jsx';
-//import AnalyticsPanel from './components/Analytics/AnalyticsPanel.jsx';
+import AnalyticsPanel from './components/Analytics/AnalyticsPanel.jsx';
 import { fetchRequests } from './api/mockApi.js';
 import { useToasts } from './hooks/useToasts.js';
+import { useTheme } from './hooks/useTheme.js';
 import styles from './App.module.css';
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
   const [details, setDetails] = useState(null); // { request, triggerElement }
 
   const { toasts, addToast, dismiss } = useToasts();
+  const { theme, toggleTheme } = useTheme();
 
   const loadRequests = useCallback(() => {
     setLoading(true);
@@ -49,7 +51,12 @@ export default function App() {
 
   return (
     <div className={styles.app}>
-      <Header openCount={openCount} urgentCount={urgentCount} />
+      <Header
+        openCount={openCount}
+        urgentCount={urgentCount}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
 
       <main className={styles.layout}>
         <div className={styles.formColumn}>
