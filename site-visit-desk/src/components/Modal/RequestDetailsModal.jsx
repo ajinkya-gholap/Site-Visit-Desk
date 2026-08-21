@@ -30,10 +30,7 @@ export default function RequestDetailsModal({ request, onClose, triggerElement }
   const target = document.getElementById('modal-root');
   if (!target || !request) return null;
 
-  // Clicking the backdrop closes the modal; clicking inside it must not, so we
-  // stop propagation on the dialog panel itself rather than checking e.target
-  // on the backdrop — this keeps the close logic in one place (the backdrop's
-  // own onClick) and avoids any nested-element edge cases.
+ 
   const stopPropagation = (e) => e.stopPropagation();
 
   return createPortal(
